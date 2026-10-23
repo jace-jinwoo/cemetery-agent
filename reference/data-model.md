@@ -1,0 +1,475 @@
+### 사용지 / 봉안묘 / 납골,백호평 외
+
+- 회원정보
+    - 회원번호
+        - m/member-number
+    - 최초계약일자
+        - t/contract_date
+    - 평수
+        - m/area_size
+    - 주소여부
+        - a/address_check
+    - 연고자1
+        - a/name
+    - 주민번호
+        - a/resident_number
+    - 우편번호
+        - a/zip_code
+    - 주소1
+        - a/address
+        - a/road_address
+    - 상세주소2
+        - a/address_detail
+    - 휴대폰
+        - a/phone
+    - 연락처1
+        - a/phone2
+    - 연락처2
+        - a/phone3
+    - 자택
+        - a/phone4
+    - 이메일
+        - a/email
+    - 신청자1/2
+        - contract - acq 중간 테이블 추가 작업 필요
+    - 비고
+        - a/memo
+        - a/ect_info
+    
+- 봉안정보
+    - 회원번호
+    - 묘역위치
+        - m/complex
+        - m/area
+        - m/row_number
+        - m/number
+    - 설묘구분 or 기수(납골,백호평 외)
+        - m/tomb_type
+        - m/number_of_tombs
+    - 봉안자
+        - d/name
+    - 관계
+        - d/relationship → 계약자가 변경될 때마다 달라지는 값이라 없어지는게 맞음
+    - 주민번호
+        - d/resident_number
+    - 우편번호
+        - d/zip_code
+    - 주소1
+        - d/address
+    - 상세주소2
+        - d/address_detail
+    - 사망일
+        - d/death_date
+    - 설묘일
+        - d/burial_date
+    - 사망원인
+        - d/death_cause
+    - 사망장소
+        - d/death_place
+    - 메모사항
+        - d/memo
+- 입금정보 → billing / payments 테이블 설계 필요
+    - 회원번호
+    - 계약일자
+    - 차수 → DB 필드도 없음
+    - 입금여부
+        - mf/is_paid
+    - 관리기간
+        - val = mf/fee_period_start - mf/fee_period_end
+    - 관리시작일
+        - mf/fee_period_start
+    - 관리종료일
+        - mf/fee_period_end
+    - 단가
+    - 대상금액
+        - mf/amount
+    - 입금일자
+        - mf/paid_at
+    - 입금금액
+    - 입금구분
+    - 메모사항
+        - mf/memo
+- 상담정보
+    - 회원번호
+    - 상담일자
+        - c/consultation_date
+    - 상담종류
+        - c/consultation_type
+    - 상담내용
+        - c/content
+    
+
+### 예정지
+
+- 회원정보
+    - 예정지계약번호
+        - 회원번호/묘적번호와 동일하게 사용되는건지 체크 필요
+    - 묘역위치
+    - 전체관리번호
+        - 
+    - 최초계약일자
+    - 계약평수
+    - 사용회원번호
+    - 사용계약일자
+    - 사용평수
+    - 사용여부
+    - 주소여부
+    - 연고자1
+        - 주민번호
+        - 우편번호
+        - 주소1
+        - 상세주소2
+        - 휴대폰
+        - 연락처1
+        - 연락처2
+        - 자택
+        - 이메일
+    - 신청자2
+        - 주민번호
+        - 우편번호
+        - 주소1
+        - 상세주소2
+        - 휴대폰
+        - 연락처1
+        - 자택
+        - 이메일
+    - 신청자3
+        - 주민번호
+        - 우편번호
+        - 주소1
+        - 상세주소2
+        - 휴대폰
+        - 연락처1
+        - 자택
+        - 이메일
+    - 비고
+- 봉안정보
+    - 예정지계약번호
+    - 묘역위치
+    - 전체관리번호
+    - 사용여부
+    - 사용회원번호
+    - 설묘구분
+    - 봉안자
+    - 관계
+    - 주민번호
+    - 우편번호
+    - 주소1
+    - 상세주소2
+    - 사망일
+    - 설묘일
+    - 사망원인
+    - 사망장소
+    - 메모사항
+- 입금정보
+    - 예정지계약번호
+    - 계약일자
+    - 차수
+    - 입금여부
+    - 관리기간
+    - 관리시작일
+    - 관리종료일
+    - 단가
+    - 대상금액
+    - 입금일자
+    - 입금금액
+    - 입금구분
+    - 메모사항
+- 상담정보
+    - 예정지계약번호
+    - 상담일자
+    - 상담종류
+    - 상담내용
+
+### RDB
+
+⚫ [Blocker] 필수
+
+- users - 관리자 계정
+    
+    
+
+주소 필드 파편화 → address, road_address, address_detail 로 분리되어 있어서 체크 필요
+
+dead → acq1,2 에 대해…
+
+1. 안치자 - 연고자 or 계약 - 연고자 매핑이 맞을지 검토
+2. N:M 관계이므로 중간 테이블 필요
+
+🔴 [Critical] 핵심 객체
+
+- cemeteries - 묘원
+    - id (PK)
+    - name - 묘원명
+    - address - 주소
+    - description - 설명
+    - is_active - 활성화 상태
+    - created_at - 등록일
+    - updated_at - 수정일
+- mausoleums - 묘역
+    - id (PK)
+    - cemetery_id (FK) - 묘원 ID
+    - transaction_id (FK) - 계약 ID
+    - member_number - 묘적번호/회원번호
+    - complex - 단지
+    - area - 구역
+    - row_number - 열
+    - number - 번호
+    - tomb_type - 묘지 형태
+    - number_of_tombs - 기수
+    - area_size - 평형
+    - period - 사용기간
+    - etc - 기타 항목
+    - created_at - 등록일
+    - updated_at - 수정일
+- transactions - 계약
+    - id (PK)
+    - cemetery_id (FK) - 묘원 ID
+    - contract_date - 계약일
+    - type - 계약 유형 : 신규/이장/해약/예정지
+    - burial_type_1 - 장례구분1 : 입관/퇴관/납골
+    - burial_type_2 - 장례구분2 : 쌍분/단분/합장/납골 봉안/납골 매장
+    - memo - 메모
+    - created_by - 등록자 ID
+    - updated_by - 수정자 ID
+    - created_at - 등록일
+    - updated_at - 수정일
+- dead - 안치자
+    - id (PK)
+    - transaction_id (FK)
+    - acquaintance1_id (FK) - 연고자1 → dead - acq 중간 테이블 두는게 나을지 검토
+    - acquaintance2_id (FK) - 연고자2
+    - name - 성명
+    - gender - 성별 : 남/여
+    - ssn - 주민등록번호 → 중복 컬럼인지 검토
+    - burial_method - 장례구분 : 매장/화장
+    - burial_method_1 - 장례구분1 : 입관/퇴관/납골
+    - burial_method_2 - 장례구분2 : 단분/합분 등
+    - tomb_type - 분묘 종류 (미사용) → 사용 안하면 제거
+    - death_date - 사망일자
+    - death_cause - 사망 원인
+    - death_place - 사망 장소
+    - address - 주소
+    - resident_number - 주민번호
+    - burial_date - 설묘일
+    - created_at - 등록일
+    - updated_at - 수정일
+    - plot_node_id - ? → 묘역 위치라면 FK 가 필요한지 검토
+- acquaintances - 연고자
+    - id (PK)
+    - transaction_id (FK)
+    - is_primary_contact - 주 연락처 여부 // 실 계약자?
+    - name - 성명
+    - relationship - 관계
+    - relationship_custom - 관계 기타 직접 입력
+    - ssn - 주민등록번호
+    - resident_number - 주민등록번호
+    - phone - 전화번호
+    - email - 이메일
+    - etc_info - 기타정보
+    - address - 주소
+    - road_address - 도로명주소
+    - address_detail - 상세주소
+    - zip_code - 우편번호
+    - memo - 메모
+    - created_at - 등록일
+    - updated_at - 수정일
+
+🟠 [High] 비용
+
+- costs - 비용 통합
+    - id (PK)
+    - transaction_id (FK)
+    - usage_fee - 사용료
+    - management_fee - 관리비
+    - burial_work_fee - 매장공사비
+    - installation_fee - 설치비
+    - repair_fee - 보수비
+    - removal_work_fee - 이장공사비
+    - other_work_fee - 기타공사비
+    - stone_processing_fee - 비석가공비
+    - agency_fee - 대행료
+    - total_cost - 총 비용
+    - stone_cost - 석물 비용
+    - usage_fee_status - 사용료 납부 상태 : 미납/부분납부/납부완료
+    - management_fee_status - 관리비 납부 상태
+    - burial_work_fee_status - 매장공사비 납부 상태
+    - installation_fee_status - 설치비 납부 상태
+    - repair_fee_status - 보수비 납부 상태
+    - removal_work_fee_status - 이장공사비 납부 상태
+    - other_work_fee_status - 기타공사비 납부 상태
+    - stone_processing_fee_status - 비석가공비 납부 상태
+    - agency_fee_status - 대행료 납부 상태
+    - usage_fee_payment_method - 사용료 납부 방법
+    - usage_fee_payment_date - 사용료 납부일
+    - burial_work_fee_payment_method - 매장공사비 납부방법
+    - burial_work_fee_payment_date - 납부일
+    - installation_fee_payment_method - 설치비 납부 방법
+    - installation_fee_payment_date - 설치비 납부일
+    - memo - 메모
+    - created_at - 생성일
+    - updated_at - 수정일
+- cost_items - 비용 항목
+    - id (PK)
+    - transaction_id (FK)
+    - cost_name - 비용 항목명
+    - fee - 비용
+    - fee_status - 납부 상태
+    - payment_method - 결제 방법
+    - payment_date - 결제 날짜
+    - created_at - 등록일
+    - updated_at - 수정일
+- stone_objects - 석물 항목
+    - id (PK)
+    - transaction_id (FK)
+    - order_index - 정렬 순서
+    - stone_name - 석물명
+    - cost - 비용
+    - fee_status - 납부상태
+    - payment_method - 결제 방법
+    - payment_date - 결제 날짜
+    - created_at - 등록일
+    - updated_at - 수정일
+    - stone_type - 석물 종류 : 묘테/상석/비석/화병/기타
+    - stone_material - 석재 종류
+    - stone_size - 석물 크기
+    - stone_quantity - 수량
+    - stone_unit_price - 단가
+    - stone_total_price - 총 가격
+    - stone_memo - 석물 메모
+- additional_costs - 추가 비용
+    - id (PK)
+    - transaction_id (FK)
+    - created_by (FK) - 등록자 ID
+    - cost_name - 비용 항목명
+    - amount - 비용 금액
+    - memo - 메모
+    - status - 납부 상태 : 미납/부분납부/납부완료
+    - payment_method - 납부방법
+    - payment_date - 납부일
+    - created_at - 등록일
+    - updated_at - 수정일
+- management_fees - 관리비
+    - id (PK)
+    - cemetery_id (FK)
+    - transaction_id (FK)
+    - fee_period_start - 관리비 기간 시작일
+    - fee_period_end - 관리비 기간 종료일
+    - amount- 관리비 금액
+    - is_paid - 납부 여부
+    - paid_at - 납부일
+    - due_date - 납부 기한
+    - memo - 메모
+    - created_at - 등록일
+    - updated_at - 수정일
+- engravings - 각자 (새기다)
+    - id (PK)
+    - transaction_id (FK)
+    - created_by (FK) - 등록자 ID
+    - engraving_type - 각자 유형
+    - content - 각자 내용
+    - character_count - 글자 수
+    - cost_per_character - 글자당 비용
+    - total_cost - 총 비용
+    - engraving_date - 각자 날짜
+    - status - 각자 상태 : pending/in_progress/completed
+    - memo - 메모
+    - fee - 비용
+    - fee_status - 납부 상태 : 미납/납부
+    - payment_method - 결제 방법
+    - payment_date - 결제 날짜
+    - content_file - 각자 내용 파일 경로
+    - content_file_name - 각자 내용 파일명
+    - created_at - 등록일
+    - updated_at - 수정일
+- vases - 꽃병
+    - id (PK)
+    - stone_object_id (FK) - 석물 ID
+    - size - 크기
+    - payment_status - 납부 상태 : 미납/부분납부/납부완료
+    - payment_method - 납부방법
+    - payment_date - 납부일
+    - created_at - 등록일
+    - updated_at- 수정일
+
+- maintenances - 보수 비용
+    - id (PK)
+    - transaction_id (FK)
+    - created_by (FK) - 등록자 ID
+    - completed_by (FK) - 완료자 ID
+    - maintenance_type - 보수 유형 : repair/cleaning/inspection/replacement/other
+    - content - 보수 내용
+    - maintenance_date - 보수 날짜
+    - cost - 보수 비용
+    - status - 보수 상태 : pending/in_progress/completed/cancelled
+    - memo - 메모
+    - created_at - 등록일
+    - updated_at - 수정일
+- cemetery_settings - 묘역 사용료
+    - id (PK)
+    - cemetery_id (FK)
+    - usage_fee_per_sqm - 평당사용료
+    - management_fee_cycle - 관리비 발생 주기 (년)
+    - management_period - 관리비 발생 기간 (년)
+    - created_at - 등록일
+    - updated_at - 수정일
+- stone_costs - 석물 비용
+    - id (PK)
+    - cemetery_id (FK)
+    - stone_type - 석물 유형 : 묘태/상석/비석 등
+    - cost - 석물 비용
+    - description - 석물 설명
+    - created_at - 등록일
+    - updated_at - 수정일
+
+🟢 [Medium] 기록
+
+- contract_histories - 계약 이력
+    - id (PK)
+    - transaction_id (FK)
+    - user_id (FK)
+    - action - 수정 유형 : create/update/cost:add/cost:update/cost:delete
+    - details - 변경상세 (JSON 문자열)
+    - created_at - 등록일
+    - updated_at - 수정일
+- consultations - 상담
+    - id (PK)
+    - transaction_id (FK)
+    - created_by (FK)
+    - content - 상담 내용
+    - consultation_date - 상담 날짜
+    - created_at - 등록일
+    - udpated_at - 수정일
+- documents - 서류
+    - id (PK)
+    - transaction_id (FK)
+    - document_type - 서류 종류 : death_certificate/burial_certificate/family_relation_certificate/family_register/cremation_certificate/privacy_consent/other
+    - file_link - 파일 링크
+    - file_name - 원본 파일명
+    - uploaded_at - 업로드 시간
+    - created_at - 등록일
+    - updated_at - 수정일
+- memos - 메모
+    - id (PK)
+    - cemetery_id (FK)
+    - transaction_id (FK)
+    - created_by (FK)
+    - udpated_by (FK)
+    - category - 메모 카테고리 : 계약/개장/석물/관리비/장례/보수/기타
+    - content - 메모 내용
+    - created_at
+    - updated_at
+
+🔵 [Low] 기타
+
+- cemetery_profile_images - 묘원 대표 이미지
+    - id (PK)
+    - cemetery_id (FK)
+    - profile_image_url (PK)
+    - created_at - 등록일
+    - updated_at - 수정일
+- cemetery_map_corners - 지도상 묘역 위치
+- cemetery_map_tiles
+- cemetery_default_starting_locations
+- search_history
+- search_histories

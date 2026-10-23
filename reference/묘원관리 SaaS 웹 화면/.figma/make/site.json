@@ -1,0 +1,10 @@
+{
+  "description": "Manage cemetery plots efficiently with a user-friendly SaaS platform designed for streamlined record keeping and maintenance scheduling.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

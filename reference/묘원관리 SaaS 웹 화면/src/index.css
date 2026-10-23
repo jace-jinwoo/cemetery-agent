@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: 'Noto Sans KR', 'Inter', system-ui, sans-serif;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+button,
+[role="button"] {
+  cursor: pointer;
+  transition: opacity 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+button:hover:not(:disabled),
+[role="button"]:hover:not(:disabled) {
+  opacity: 0.88;
+  box-shadow: 0 0 0 1px rgba(30, 58, 43, 0.55);
+}
+
+a:hover {
+  outline: 1px solid rgba(30, 58, 43, 0.45);
+  border-radius: 2px;
+}
+
+button:active:not(:disabled),
+[role="button"]:active:not(:disabled) {
+  opacity: 0.75;
+  box-shadow: none;
+  transform: translateY(1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+a {
+  cursor: pointer;
+}
+
+@theme inline {
+  --color-forest: #1E3A2B;
+  --color-forest-hover: #2d5940;
+  --color-sage: #3B7A57;
+  --color-sage-light: #A7C4B0;
+  --color-bg: #F3F6F4;
+  --color-surface: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-text: #1E293B;
+  --color-text-muted: #64748B;
+  --color-text-faint: #94A3B8;
+}
